@@ -1,0 +1,1 @@
+This repository contains all lecture notes and codes of Flask tutorial by Corey Schafer
