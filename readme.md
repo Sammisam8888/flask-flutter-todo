@@ -4,7 +4,10 @@ run this command to create a python environment
 ```
 python3 -m venv "flask-env"
 source ./flask-env/bin/activate
-pip3 install -r requirements.txt 
+```
+
+```
+pip install -r requirements.txt
 ```
 
 run this command to create app link to the file and then the run command
