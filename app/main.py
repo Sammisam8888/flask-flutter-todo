@@ -14,17 +14,17 @@ db.init_app(app)
 @app.route('/', methods=['GET','POST'])
 def hello():
     if request.method == 'POST':
-        task_name = request.form['name']
+        task_name = request.form['task']
         task_description = request.form['description']
-        task_duedate = request.form['duedate']
+        task_duedate = request.form['due_date']
         task_is_executed = request.form.get('is_executed') == False
-
         # Create new task
         new_task = TodoItem(name=task_name, description=task_description,
                             duedate=task_duedate, is_executed=task_is_executed)
         try:
             db.session.add(new_task)
             db.session.commit()
+
             return redirect('/')
         except:
             return 'There was an issue adding your task'
