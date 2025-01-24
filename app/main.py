@@ -1,39 +1,47 @@
-from flask import Flask, request, jsonify
+from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
-from flask_marshmallow import Marshmallow
-import os
+from models import TodoItem 
+from database import db
 
 
 app = Flask(__name__)
-basedir = os.path.abspath(os.path.dirname(__file__))
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'todo-app.db')
+db.init_app(app)
 
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS']= False
 
-db=SQLAlchemy(app)
-ma=Marshmallow(app)
 
-@app.route('/')
+@app.route('/', methods=['GET','POST'])
 def hello():
-    return "Home Page"
+    if request.method == 'POST':
+        task_name = request.form['name']
+        task_description = request.form['description']
+        task_duedate = request.form['duedate']
+        task_is_executed = request.form.get('is_executed') == False
 
-class TodoItem(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100))
-    is_executed = db.Column(db.Boolean)
+        # Create new task
+        new_task = TodoItem(name=task_name, description=task_description,
+                            duedate=task_duedate, is_executed=task_is_executed)
+        try:
+            db.session.add(new_task)
+            db.session.commit()
+            return redirect('/')
+        except:
+            return 'There was an issue adding your task'
+    else:
+        tasks=TodoItem.query.order_by(TodoItem.date_created).all()
+        return render_template('index.html',tasks=tasks)
 
-    def __init__(self, name, is_executed):
-        self.name = name
-        self.is_executed = is_executed
+@app.route('/update/<int:id>')
+def update(id):
+    return "update"
+
+@app.route('/delete/<int:id>')
+def delete(id):
+    return "delete"
 
 
-# Todo schema
-class TodoSchema(ma.Schema):
-    class Meta:
-        fields = ('id', 'name', 'is_executed')
 
 
-# Initialize schema
-todo_schema = TodoSchema()
-todos_schema = TodoSchema(many=True)
+if __name__ == '__main__':
+    app.run(debug=True)

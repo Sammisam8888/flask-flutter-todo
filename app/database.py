@@ -1,8 +1,3 @@
-from main import db
-db.create_all()
+from flask_sqlalchemy import SQLAlchemy
 
-def get_db():
-    yield(db)
-    return
-
-exit()
+db = SQLAlchemy()
