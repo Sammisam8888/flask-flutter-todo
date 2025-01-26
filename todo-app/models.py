@@ -10,6 +10,9 @@ class TodoItem(db.Model):
     is_executed = db.Column(db.Boolean)
     date_created = db.Column(db.DateTime,default=datetime.utcnow)
     duedate=db.Column(db.DateTime)
+    
+    class Config():
+        from_attribute=True
 
     def __repr__(self):
         return '<Task %r>' % self.id
