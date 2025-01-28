@@ -5,11 +5,12 @@ from google.oauth2 import id_token
 from pip._vendor import cachecontrol
 from google_auth_oauthlib.flow import Flow
 import google.auth.transport.requests 
+from .secret import password,clientid
 
 app=Flask("Google Login App")
-app.secret_key="password"
+app.secret_key=password
 
-GOOGLE_CLIENT_ID="798209321348-l3ut9b5mh0f4cohce3q4u0pucitc66k9.apps.googleusercontent.com"
+GOOGLE_CLIENT_ID=clientid
 
 
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1" 
