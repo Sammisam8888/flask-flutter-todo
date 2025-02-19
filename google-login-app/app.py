@@ -5,7 +5,7 @@ from google.oauth2 import id_token
 from pip._vendor import cachecontrol
 from google_auth_oauthlib.flow import Flow
 import google.auth.transport.requests 
-from .secret import password,clientid
+from secret import password,clientid
 
 app=Flask("Google Login App")
 app.secret_key=password
